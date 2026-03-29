@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Expenses — SplitEasy{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+    <!-- Page Header -->
+    <div class="page-header-section">
+        <div class="breadcrumb">
+            <a href="{{ url_for('index') }}">Home</a>
+            <span class="separator">/</span>
+            <span class="current">Expenses</span>
+        </div>
+        <div class="page-header-with-action">
+            <div>
+                <h1 class="page-title">All Expenses</h1>
+                <p class="page-description">View and manage all recorded expenses</p>
+            </div>
+            <a href="{{ url_for('add_expense') }}" class="btn btn-primary">
+                <span class="btn-icon">+</span>
+                Add Expense
+            </a>
+        </div>
+    </div>
+
+    {% if not expenses %}
+    <div class="empty-state-large">
+        <div class="empty-illustration">📭</div>
+        <h2>No expenses yet</h2>
+        <p>Start tracking your group expenses by adding your first expense</p>
+        <div class="empty-actions">
+            <a href="{{ url_for('add_expense') }}" class="btn btn-primary btn-lg">
+                <span class="btn-icon">+</span>
+                Add Your First Expense
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card">
+            <div class="summary-label">Total Expenses</div>
+            <div class="summary-value">{{ expenses|length }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Total Amount</div>
+            <div class="summary-value summary-amount">₹{{ "%.2f"|format(expenses|sum(attribute='amount')) }}</div>
+        </div>
+    </div>
+
+    <!-- Expenses Table -->
+    <div class="table-card">
+        <div class="table-header">
+            <h3>Expense History</h3>
+            <div class="table-actions">
+                <a href="{{ url_for('calculate') }}" class="btn btn-secondary btn-sm">
+                    <span class="btn-icon">🧮</span>
+                    Calculate Split
+                </a>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Amount</th>
+                        <th>Paid By</th>
+                        <th>Split Among</th>
+                        <th>Description</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expenses %}
+                    <tr class="table-row">
+                        <td>
+                            <div class="amount-cell">₹{{ "%.2f"|format(expense.amount) }}</div>
+                        </td>
+                        <td>
+                            <div class="user-cell">
+                                <div class="user-avatar-sm">{{ expense.payer[0]|upper }}</div>
+                                <span>{{ expense.payer }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="participants-cell">{{ expense.participants }}</div>
+                        </td>
+                        <td>
+                            <div class="description-cell">{{ expense.description or '—' }}</div>
+                        </td>
+                        <td class="text-right">
+                            <button 
+                                onclick="if(confirm('Delete this expense?')) window.location.href='{{ url_for('delete_expense', expense_id=expense.id) }}'" 
+                                class="btn-icon-action btn-delete-action">
+                                <span>🗑️</span>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Action Footer -->
+    <div class="page-footer-actions">
+        <a href="{{ url_for('calculate') }}" class="btn btn-primary btn-lg">
+            <span class="btn-icon">🧮</span>
+            Calculate Settlement
+        </a>
+        <a href="{{ url_for('add_expense') }}" class="btn btn-secondary btn-lg">
+            <span class="btn-icon">+</span>
+            Add Another Expense
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

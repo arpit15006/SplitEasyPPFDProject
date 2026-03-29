@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Add User — SplitEasy{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+    <!-- Page Header -->
+    <div class="page-header-section">
+        <div class="breadcrumb">
+            <a href="{{ url_for('index') }}">Home</a>
+            <span class="separator">/</span>
+            <span class="current">Add User</span>
+        </div>
+        <h1 class="page-title">Add User</h1>
+        <p class="page-description">Add people to your expense group to start tracking shared costs</p>
+    </div>
+
+    <div class="split-layout">
+        <!-- Left: Form Section -->
+        <div class="form-section">
+            <div class="form-card">
+                <div class="form-header">
+                    <h2>New User</h2>
+                    <p>Enter the name of the person you want to add</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('add_user') }}" class="modern-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            placeholder="e.g., John Doe" 
+                            required 
+                            autofocus
+                            class="form-input-large">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span class="btn-icon">✓</span>
+                            Add User
+                        </button>
+                    </div>
+                </form>
+
+                <div class="form-footer">
+                    <p class="help-text">💡 Tip: Add all group members before creating expenses</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Users List Section -->
+        <div class="list-section">
+            {% if users %}
+            <div class="list-card">
+                <div class="list-header">
+                    <h3>Current Users</h3>
+                    <span class="count-badge">{{ users|length }}</span>
+                </div>
+                
+                <div class="users-grid">
+                    {% for user in users %}
+                    <div class="user-card">
+                        <div class="user-avatar">{{ user.name[0]|upper }}</div>
+                        <div class="user-info">
+                            <div class="user-name">{{ user.name }}</div>
+                            <div class="user-meta">Member</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-card">
+                <div class="empty-icon">👥</div>
+                <h3>No users yet</h3>
+                <p>Add your first user to get started</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-nav">
+        <a href="{{ url_for('add_expense') }}" class="quick-nav-item">
+            <span class="quick-nav-icon">💵</span>
+            <span class="quick-nav-text">Add Expense</span>
+            <span class="quick-nav-arrow">→</span>
+        </a>
+        <a href="{{ url_for('view_expenses') }}" class="quick-nav-item">
+            <span class="quick-nav-icon">📋</span>
+            <span class="quick-nav-text">View Expenses</span>
+            <span class="quick-nav-arrow">→</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

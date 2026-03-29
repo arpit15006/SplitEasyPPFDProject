@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}SplitEasy — Split bills effortlessly{% endblock %}
+
+{% block content %}
+<div class="homepage-wrapper">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Split bills effortlessly</h1>
+            <p class="hero-subtitle">Track expenses and settle up with your group in seconds. No spreadsheets, no confusion.</p>
+            <div class="hero-cta">
+                <a href="{{ url_for('add_expense') }}" class="btn btn-primary btn-lg">Get Started</a>
+                <a href="{{ url_for('view_expenses') }}" class="btn btn-secondary btn-lg">View Expenses</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Stats -->
+    <section class="dashboard-stats">
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-icon">👥</div>
+                <div class="stat-content">
+                    <div class="stat-label">Total Users</div>
+                    <div class="stat-value">{{ user_count }}</div>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">🧾</div>
+                <div class="stat-content">
+                    <div class="stat-label">Total Expenses</div>
+                    <div class="stat-value">{{ expense_count }}</div>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">✓</div>
+                <div class="stat-content">
+                    <div class="stat-label">Status</div>
+                    <div class="stat-value stat-status">Active</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions Grid -->
+    <section class="quick-actions">
+        <h2 class="section-title">Quick Actions</h2>
+        <div class="actions-grid">
+            <a href="{{ url_for('add_user') }}" class="action-tile">
+                <div class="tile-icon">👤</div>
+                <div class="tile-content">
+                    <h3 class="tile-title">Add User</h3>
+                    <p class="tile-description">Add people to your group</p>
+                </div>
+                <div class="tile-arrow">→</div>
+            </a>
+            
+            <a href="{{ url_for('add_expense') }}" class="action-tile">
+                <div class="tile-icon">💵</div>
+                <div class="tile-content">
+                    <h3 class="tile-title">Add Expense</h3>
+                    <p class="tile-description">Record a new expense</p>
+                </div>
+                <div class="tile-arrow">→</div>
+            </a>
+            
+            <a href="{{ url_for('view_expenses') }}" class="action-tile">
+                <div class="tile-icon">📋</div>
+                <div class="tile-content">
+                    <h3 class="tile-title">View Expenses</h3>
+                    <p class="tile-description">See all transactions</p>
+                </div>
+                <div class="tile-arrow">→</div>
+            </a>
+            
+            <a href="{{ url_for('calculate') }}" class="action-tile">
+                <div class="tile-icon">🧮</div>
+                <div class="tile-content">
+                    <h3 class="tile-title">Calculate Split</h3>
+                    <p class="tile-description">See who owes whom</p>
+                </div>
+                <div class="tile-arrow">→</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Feature Highlights -->
+    <section class="features-section">
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Lightning Fast</h3>
+                <p class="feature-text">Calculate splits instantly with our optimized algorithm</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔒</div>
+                <h3 class="feature-title">Offline First</h3>
+                <p class="feature-text">Works completely offline on your local machine</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">Smart Settlements</h3>
+                <p class="feature-text">Minimize transactions with intelligent optimization</p>
+            </div>
+        </div>
+    </section>
+
+    {% if user_count > 0 or expense_count > 0 %}
+    <!-- Danger Zone -->
+    <section class="danger-section">
+        <div class="danger-zone">
+            <div class="danger-content">
+                <h3>⚠️ Reset All Data</h3>
+                <p>This will permanently delete all users and expenses. This action cannot be undone.</p>
+            </div>
+            <a href="{{ url_for('reset_all') }}" class="btn btn-danger" onclick="return confirm('Are you sure? This cannot be undone!')">Reset Everything</a>
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

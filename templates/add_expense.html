@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Add Expense — SplitEasy{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+    <!-- Page Header -->
+    <div class="page-header-section">
+        <div class="breadcrumb">
+            <a href="{{ url_for('index') }}">Home</a>
+            <span class="separator">/</span>
+            <span class="current">Add Expense</span>
+        </div>
+        <h1 class="page-title">Add Expense</h1>
+        <p class="page-description">Record a new shared expense and split it among group members</p>
+    </div>
+
+    {% if not users %}
+    <div class="alert-card alert-warning">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+            <h3>No users found</h3>
+            <p>You need to add users before creating expenses. <a href="{{ url_for('add_user') }}">Add users now</a></p>
+        </div>
+    </div>
+    {% else %}
+    <div class="expense-form-wrapper">
+        <div class="form-card-large">
+            <form method="POST" action="{{ url_for('add_expense') }}" class="modern-form">
+                <!-- Amount Section -->
+                <div class="form-section-group">
+                    <div class="section-label">
+                        <span class="section-number">1</span>
+                        <span class="section-title">Expense Details</span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group form-group-featured">
+                            <label for="amount">Amount (₹)</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">₹</span>
+                                <input 
+                                    type="number" 
+                                    id="amount" 
+                                    name="amount" 
+                                    step="0.01" 
+                                    min="0.01" 
+                                    placeholder="0.00" 
+                                    required 
+                                    autofocus
+                                    class="form-input-large">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description (Optional)</label>
+                            <input 
+                                type="text" 
+                                id="description" 
+                                name="description" 
+                                placeholder="e.g., Dinner at restaurant"
+                                class="form-input-large">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paid By Section -->
+                <div class="form-section-group">
+                    <div class="section-label">
+                        <span class="section-number">2</span>
+                        <span class="section-title">Who Paid?</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paid_by">Select Person</label>
+                        <select id="paid_by" name="paid_by" required class="form-input-large">
+                            <option value="">Choose who paid for this expense</option>
+                            {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Split Among Section -->
+                <div class="form-section-group">
+                    <div class="section-label">
+                        <span class="section-number">3</span>
+                        <span class="section-title">Split Among</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Select Participants</label>
+                        <div class="participants-grid">
+                            {% for user in users %}
+                            <label class="participant-card">
+                                <input type="checkbox" name="participants" value="{{ user.id }}">
+                                <div class="participant-content">
+                                    <div class="participant-avatar">{{ user.name[0]|upper }}</div>
+                                    <span class="participant-name">{{ user.name }}</span>
+                                    <span class="participant-check">✓</span>
+                                </div>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-actions-large">
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">
+                        <span class="btn-icon">✓</span>
+                        Add Expense
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Help Card -->
+        <div class="help-card">
+            <div class="help-icon">💡</div>
+            <h3>How it works</h3>
+            <ul class="help-list">
+                <li>Enter the total amount spent</li>
+                <li>Select who paid for the expense</li>
+                <li>Choose who should split the cost</li>
+                <li>We'll calculate the fair share automatically</li>
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Quick Actions -->
+    <div class="quick-nav">
+        <a href="{{ url_for('add_user') }}" class="quick-nav-item">
+            <span class="quick-nav-icon">👤</span>
+            <span class="quick-nav-text">Add User</span>
+            <span class="quick-nav-arrow">→</span>
+        </a>
+        <a href="{{ url_for('view_expenses') }}" class="quick-nav-item">
+            <span class="quick-nav-icon">📋</span>
+            <span class="quick-nav-text">View Expenses</span>
+            <span class="quick-nav-arrow">→</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

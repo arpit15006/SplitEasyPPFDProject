@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Settlement — SplitEasy{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+    <!-- Page Header -->
+    <div class="page-header-section">
+        <div class="breadcrumb">
+            <a href="{{ url_for('index') }}">Home</a>
+            <span class="separator">/</span>
+            <span class="current">Settlement</span>
+        </div>
+        <h1 class="page-title">Settlement Summary</h1>
+        <p class="page-description">Optimized payment instructions to settle all expenses</p>
+    </div>
+
+    {% if not settlements %}
+    <!-- All Settled State -->
+    <div class="success-state-large">
+        <div class="success-illustration">
+            <div class="success-circle">✓</div>
+        </div>
+        <h2 class="success-title">All Settled!</h2>
+        <p class="success-message">Everyone has paid their fair share. No settlements needed at this time.</p>
+        
+        <div class="success-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg">
+                <span class="btn-icon">←</span>
+                Back to Home
+            </a>
+            <a href="{{ url_for('view_expenses') }}" class="btn btn-primary btn-lg">
+                <span class="btn-icon">📋</span>
+                View Expenses
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <!-- Settlement Stats -->
+    <div class="settlement-stats">
+        <div class="stat-card-settlement">
+            <div class="stat-icon-large">💸</div>
+            <div class="stat-content-large">
+                <div class="stat-label">Total Transactions</div>
+                <div class="stat-value-large">{{ settlements|length }}</div>
+            </div>
+        </div>
+        <div class="stat-card-settlement">
+            <div class="stat-icon-large">⚡</div>
+            <div class="stat-content-large">
+                <div class="stat-label">Optimized</div>
+                <div class="stat-value-large stat-optimized">Yes</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settlement Instructions -->
+    <div class="settlements-container">
+        <div class="settlements-header">
+            <h2>Payment Instructions</h2>
+            <p>Follow these transactions to settle all expenses</p>
+        </div>
+
+        <div class="settlements-list">
+            {% for settlement in settlements %}
+            <div class="settlement-card">
+                <div class="settlement-number">{{ loop.index }}</div>
+                
+                <div class="settlement-flow">
+                    <div class="settlement-person settlement-from">
+                        <div class="person-avatar-large">{{ settlement.from[0]|upper }}</div>
+                        <div class="person-details">
+                            <div class="person-label">From</div>
+                            <div class="person-name-large">{{ settlement.from }}</div>
+                        </div>
+                    </div>
+
+                    <div class="settlement-arrow-container">
+                        <div class="settlement-amount-badge">
+                            <div class="amount-label">Pays</div>
+                            <div class="amount-value">₹{{ "%.2f"|format(settlement.amount) }}</div>
+                        </div>
+                        <div class="arrow-line">
+                            <span class="arrow-head">→</span>
+                        </div>
+                    </div>
+
+                    <div class="settlement-person settlement-to">
+                        <div class="person-avatar-large">{{ settlement.to[0]|upper }}</div>
+                        <div class="person-details">
+                            <div class="person-label">To</div>
+                            <div class="person-name-large">{{ settlement.to }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Info Banner -->
+    <div class="info-banner">
+        <div class="info-banner-icon">💡</div>
+        <div class="info-banner-content">
+            <h3>Smart Optimization</h3>
+            <p>These settlements are optimized to minimize the number of transactions needed. Instead of everyone paying everyone, we've simplified it to just {{ settlements|length }} transaction{{ 's' if settlements|length != 1 else '' }}.</p>
+        </div>
+    </div>
+
+    <!-- Action Footer -->
+    <div class="page-footer-actions">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg">
+            <span class="btn-icon">←</span>
+            Back to Home
+        </a>
+        <a href="{{ url_for('view_expenses') }}" class="btn btn-primary btn-lg">
+            <span class="btn-icon">📋</span>
+            View Expenses
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
