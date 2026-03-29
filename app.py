@@ -37,6 +37,9 @@ def init_db():
     conn.commit()
     conn.close()
 
+# Ensure the database tables exist (Vercel cold start)
+init_db()
+
 def calculate_settlements():
     conn = get_db()
     
