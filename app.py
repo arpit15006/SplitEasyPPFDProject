@@ -6,8 +6,11 @@ import os
 app = Flask(__name__)
 app.secret_key = 'spliteasysecretkey'
 
-# Use /tmp on Vercel because the root filesystem is read-only
-DATABASE = '/tmp/splitease.db' if os.environ.get('VERCEL') else 'splitease.db'
+# Detect if we are on Vercel or in a read-only environment to use /tmp
+if os.environ.get('VERCEL') or os.environ.get('VERCEL_URL') or not os.access('.', os.W_OK):
+    DATABASE = '/tmp/splitease.db'
+else:
+    DATABASE = 'splitease.db'
 
 def get_db():
     conn = sqlite3.connect(DATABASE)
